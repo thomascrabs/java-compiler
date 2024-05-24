@@ -58,7 +58,6 @@ public class Parser {
     private Statement parseVariable() {
 
         String varName = lexer.getCurrentToken().getValue();
-        System.out.println(varName);
         lexer.nextToken();
         lexer.nextToken();
         String val = lexer.getCurrentToken().getValue();

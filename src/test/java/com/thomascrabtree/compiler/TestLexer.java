@@ -19,6 +19,28 @@ public class TestLexer {
         Assertions.assertTrue(readOK);
     }
 
+    @Test
+    public void testEmptyProgram(){
+        Lexer lexer = new Lexer("");
+        boolean readOK = lexer.nextToken();
+        Assertions.assertFalse(readOK);
+    }
+
+    @Test
+    public void testInvalidToken(){
+        Lexer lexer = new Lexer("lhsfo823kjgwi8yteyf");
+        boolean readOK = lexer.nextToken();
+        Assertions.assertTrue(readOK); //still reads the string but then would fail elsewhere
+    }
+
+    @Test
+    public void testInvalidToken2(){
+        Lexer lexer = new Lexer("^%*$*%)&");
+        boolean readOK = lexer.nextToken();
+        Assertions.assertTrue(readOK); //still reads the string but then would fail elsewhere
+    }
+
+
     private String getResourceFileAsString(String fileName) {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         try (InputStream is = classLoader.getResourceAsStream(fileName)) {
