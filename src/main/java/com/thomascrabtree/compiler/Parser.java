@@ -1,7 +1,6 @@
 package com.thomascrabtree.compiler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Parser {
@@ -66,8 +65,22 @@ public class Parser {
         } else {
             variables.addVariable(varName, val);
         }
+        //TODO implement a better way in the enum to do this, maybe using an ordered mechanism for multi operator expressions
+        if (variables.getVariableType(varName).equals(Type.EXPRESSION)){
+            if (val.contains(ArithmeticExpressions.ArithmeticOperators.ADD.getValue())){
+                val = ArithmeticExpressions.add(val);
+            } else if (val.contains(ArithmeticExpressions.ArithmeticOperators.MULTIPLY.getValue())) {
+                val = ArithmeticExpressions.multiply(val);
+            } else if (val.contains(ArithmeticExpressions.ArithmeticOperators.SUBTRACT.getValue())){
+                val = ArithmeticExpressions.subtract(val);
+            } else if (val.contains(ArithmeticExpressions.ArithmeticOperators.DIVIDE.getValue())){
+                val = ArithmeticExpressions.divide(val);
+            }
 
-
+        }
+        if (val.startsWith("'")){
+            val = val.substring(1);
+        }
         return new Statement(TokenType.VARIABLE_NAME, varName + " " + val);
     }
 

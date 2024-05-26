@@ -1,11 +1,16 @@
-number = 327
-Print number
-b = test
-Print b
-Print number
-c = 'hello, world!'
-Print c
-d = '1342'
-Print d
-d = 10
-Print d
+number = 327;
+Print number;
+a = test;
+Print a;
+b = '13 + 42';
+Print b;
+b = 10;
+Print b;
+c = 10 + 2;
+Print c;
+d = 5 * 2;
+Print d;
+e = 10 / 2;
+Print e;
+f = 10 - 2;
+Print f;

@@ -24,7 +24,7 @@ public class Lexer {
 
             final char currentChar = sourceCode.charAt(currentIndex);
 
-            if (Arrays.asList(' ', '\r', '\t', '\n').contains(currentChar)) {
+            if (Arrays.asList(' ', '\r', ';', '\n').contains(currentChar)) {
                 skipWhiteSpace();
                 continue;
             } else if (Character.isUpperCase(currentChar)) { // all functions start uppercase?
@@ -44,15 +44,17 @@ public class Lexer {
             } else {
                 currentToken = new Token(TokenType.VARIABLE_NAME, readVariableValue());
             }
+            currentIndex++;
             return true;
         }
+        currentIndex++;
         return false;
 
     }
 
     private String readComplexVariableValue() {
         StringBuilder sb = new StringBuilder();
-        currentIndex++; //increment by 1 to move past the first '
+        //currentIndex++; //increment by 1 to move past the first '
         char currentChar = sourceCode.charAt(currentIndex);
         while (true) {
             sb.append(currentChar);
@@ -89,11 +91,10 @@ public class Lexer {
         return sb.toString();
     }
 
-    //TODO results in number overflows and does it actually capture values as well as numbers properly?
-    private String readVariableValue() {
+     private String readVariableValue() {
         StringBuilder sb = new StringBuilder();
         char currentChar = sourceCode.charAt(currentIndex);
-        while (!isEndOfCode() && Character.isDigit(currentChar)) {
+        while ( currentChar!=';') {
             sb.append(currentChar);
             currentIndex++;
             if (isEndOfCode()) break;

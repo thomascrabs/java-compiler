@@ -23,7 +23,7 @@ public class TestParser {
 
     @Test
     public void testNewNumberVariable(){
-        Lexer lexer = new Lexer("number = 327");
+        Lexer lexer = new Lexer("number = 327;");
         VariableHolder variables = new VariableHolder();
         Parser parser = new Parser(lexer, variables);
         List<Statement> statements = parser.parseProgram();
@@ -33,7 +33,7 @@ public class TestParser {
 
     @Test
     public void testNewStringVariable(){
-        Lexer lexer = new Lexer("word = 'Word'");
+        Lexer lexer = new Lexer("word = 'Word';");
         VariableHolder variables = new VariableHolder();
         Parser parser = new Parser(lexer, variables);
         List<Statement> statements = parser.parseProgram();
@@ -43,7 +43,7 @@ public class TestParser {
 
     @Test
     public void testNewComplexStringVariable(){
-        Lexer lexer = new Lexer("string = 'This is a string'");
+        Lexer lexer = new Lexer("string = 'This is a string';");
         VariableHolder variables = new VariableHolder();
         Parser parser = new Parser(lexer, variables);
         List<Statement> statements = parser.parseProgram();
@@ -53,7 +53,7 @@ public class TestParser {
 
     @Test
     public void testNewNumberAsStringVariable(){
-        Lexer lexer = new Lexer("wordNumber = '12345'");
+        Lexer lexer = new Lexer("wordNumber = '12345';");
         VariableHolder variables = new VariableHolder();
         Parser parser = new Parser(lexer, variables);
         List<Statement> statements = parser.parseProgram();
@@ -63,7 +63,7 @@ public class TestParser {
 
     @Test
     public void testTwoVariableAssignment(){
-        Lexer lexer = new Lexer("var = test\r\nnewVar = newWord");
+        Lexer lexer = new Lexer("var = test;\r\nnewVar = newWord;");
         VariableHolder variables = new VariableHolder();
         Parser parser = new Parser(lexer, variables);
         List<Statement> statements = parser.parseProgram();
@@ -71,6 +71,16 @@ public class TestParser {
         String stmt2 = statements.get(1).getStatementValues();
         Assertions.assertEquals("var test", stmt1);
         Assertions.assertEquals("newVar newWord", stmt2);
+    }
+
+    @Test
+    public void testAdditionExpressionVariableAssignment(){
+        Lexer lexer = new Lexer("var = 1 + 1;");
+        VariableHolder variables = new VariableHolder();
+        Parser parser = new Parser(lexer, variables);
+        List<Statement> statements = parser.parseProgram();
+        String stmt1 = statements.get(0).getStatementValues();
+        Assertions.assertEquals("var 2", stmt1);
     }
 
     private String getResourceFileAsString(String fileName) {

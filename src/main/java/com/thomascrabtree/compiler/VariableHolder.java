@@ -11,7 +11,23 @@ public class VariableHolder {
 
     public void addVariable(String name, String value){
 
-        variables.add(new Variable(variables.size()+1 ,name, value)); //use size to work out the next int to use
+        if (value.matches("-?\\d+(\\.\\d+)?")){ //
+            variables.add(new Variable(variables.size()+1, Type.NUMBER, name, value)); //use size to work out the next int to use
+        } else if (ArithmeticExpressions.ArithmeticOperators.containsOperator(value) && !value.contains("'")) {
+            variables.add(new Variable(variables.size()+1, Type.EXPRESSION, name, value)); //use size to work out the next int to use
+        }else {
+            variables.add(new Variable(variables.size()+1, Type.STRING, name, value)); //use size to work out the next int to use
+        }
+
+    }
+
+    public Type getVariableType(String variable){
+        for (Variable var : variables){
+            if (var.getName().equals(variable)){
+                return var.getType();
+            }
+        }
+        return null;
     }
 
     public String getVariableValue(String name){
