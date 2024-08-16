@@ -48,15 +48,15 @@ public class CodeGenerator {
 
     private void writeStatements() throws CompilerException {
 
-        for (int i = 0; i < statements.size(); i++) {
+        for (Statement statement : statements) {
 
-            if (statements.get(i).getTokenType().equals(TokenType.VARIABLE_NAME)) {
+            if (statement.getTokenType().equals(TokenType.VARIABLE_NAME)) {
 
-                String[] sValue = statements.get(i).getStatementValues().split(" ", 2);
+                String[] sValue = statement.getStatementValues().split(" ", 2);
                 String variableName = sValue[0];
                 String variableValue = sValue[1];
 
-                if (sValue[1].matches("-?\\d+(\\.\\d+)?")){
+                if (sValue[1].matches("-?\\d+(\\.\\d+)?")) {
                     int value = Integer.parseInt(variableValue);
                     if (value > 32767) throw new CompilerException("Value of number variable too large");
                     mv.visitIntInsn(Opcodes.SIPUSH, value);
@@ -66,16 +66,20 @@ public class CodeGenerator {
                 }
                 int position = variables.getVariablePosition(variableName);
                 mv.visitVarInsn(Opcodes.ASTORE, position);
-            } else if (statements.get(i).getTokenType().equals(TokenType.PRINT)) {
+            } else if (statement.getTokenType().equals(TokenType.PRINT)) {
 
-                String[] sValue = statements.get(i).getStatementValues().split(" ");
+                String[] sValue = statement.getStatementValues().split(" ");
                 String variableName = sValue[0];
-
-                //TODO if the variable doesn't exist print the value
+                
                 mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-                mv.visitVarInsn(Opcodes.ALOAD, variables.getVariablePosition(variableName));
+                if (variables.getVariablePosition(variableName)==0){
+                    String value = statement.getStatementValues();
+                    mv.visitLdcInsn(value);
+                } else {
+                    mv.visitVarInsn(Opcodes.ALOAD, variables.getVariablePosition(variableName));
+                }
                 mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/Object;)V", false);
-            } else if (statements.get(i).getTokenType().equals(TokenType.DROP)){
+            } else if (statement.getTokenType().equals(TokenType.DROP)) {
                 //TODO do we want this to just drop from the variable list or from the actual class code?
             }
         }

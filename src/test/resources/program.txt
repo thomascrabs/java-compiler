@@ -1,3 +1,6 @@
+Print 12345;
+Print words;
+Print 123;
 number = 327;
 Print number;
 a = test;
